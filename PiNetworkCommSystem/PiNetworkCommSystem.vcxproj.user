@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <RemoteDebuggerCommandArguments>-tcp -client -ip 192.168.3.8 -port 9999</RemoteDebuggerCommandArguments>
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+    <RemoteDebuggingTarget>1571480385;192.168.110.130 (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <RemoteTarget>1571480385;192.168.110.130 (username=, port=22, authentication=Password)</RemoteTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <RemoteDebuggerCommandArguments>-tcp -client -send -ip 192.168.3.8 -port 9999</RemoteDebuggerCommandArguments>
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+    <RemoteDebuggingTarget>-1711299036;192.168.3.32 (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <RemoteTarget>-1711299036;192.168.3.32 (username=, port=22, authentication=Password)</RemoteTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <RemoteTarget>1571480385;192.168.110.130 (username=, port=22, authentication=Password)</RemoteTarget>
+    <RemoteDebuggingTarget>1571480385;192.168.110.130 (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+    <RemoteDebuggerCommandArguments>-tcp -server -recv -ip 192.168.110.130 -port 9999</RemoteDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <RemoteTarget>1571480385;192.168.110.130 (username=, port=22, authentication=Password)</RemoteTarget>
+    <RemoteDebuggingTarget>1571480385;192.168.110.130 (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+  </PropertyGroup>
+</Project>

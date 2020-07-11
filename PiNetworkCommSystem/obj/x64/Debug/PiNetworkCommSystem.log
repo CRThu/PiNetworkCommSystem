@@ -1,0 +1,15 @@
+﻿  正在验证源
+  正在将源远程复制到“192.168.110.130”
+  正在验证体系结构
+  正在验证体系结构
+  正在启动远程生成
+  正在编译源:
+  main.cpp
+D:\Code\Visual Studio\PiNetworkCommSystem\main.cpp(104,18): warning : conversion to ‘uint16_t {aka short unsigned int}’ from ‘int’ may alter its value [-Wconversion]
+D:\Code\Visual Studio\PiNetworkCommSystem\main.cpp(104,18): warning :              PORT = atoi(string(*iter).c_str());
+D:\Code\Visual Studio\PiNetworkCommSystem\main.cpp(104,18): warning :                   ^
+D:\Code\Visual Studio\PiNetworkCommSystem\main.cpp(217,57): warning : conversion to ‘int’ from ‘ssize_t {aka long int}’ may alter its value [-Wconversion]
+D:\Code\Visual Studio\PiNetworkCommSystem\main.cpp(217,57): warning :                  int ret = recv(connfd, recv_buf, 1024, 0);
+D:\Code\Visual Studio\PiNetworkCommSystem\main.cpp(217,57): warning :                                                          ^
+  正在链接对象
+  PiNetworkCommSystem.vcxproj -> D:\Code\Visual Studio\PiNetworkCommSystem\bin\x64\Debug\PiNetworkCommSystem.out

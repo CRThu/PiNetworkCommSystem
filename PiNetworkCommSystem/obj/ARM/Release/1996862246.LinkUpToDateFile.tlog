@@ -1,0 +1,1 @@
+g++ -o "/home/pi/projects/PiNetworkCommSystem/bin/ARM/Release/PiNetworkCommSystem.out" -Wl,--no-undefined -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack /home/pi/projects/PiNetworkCommSystem/obj/ARM/Release/main.o
