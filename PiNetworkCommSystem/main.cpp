@@ -1,5 +1,6 @@
 ﻿#include <cstdio>
 #include <cstring>
+#include <string>
 #include <iostream>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -7,6 +8,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <list>
+
+#include "SocketComm.h"
 
 using namespace std;
 
@@ -33,12 +36,17 @@ uint16_t PORT = 8888;
 list<string> lst_argv;
 list<string>::iterator iter;
 
+SocketComm socketComm;
+
 // Help argv: PiNetworkCommSystem.out -h
 // Debug argv: -tcp -client -send -ip 192.168.3.8 -port 9999
 // Debug argv: -tcp -server -recv -ip 192.168.110.130 -port 9999
+// Debug argv: -udp -client -recv -ip 192.168.3.8 -port 9999
 
 // TCP SERVER: SOCKET > BIND > LISTEN > ACCEPT  > RECV > SEND > CLOSE
 // TCP CLIENT: SOCKET >>>>>(BIND)>>>>>> CONNECT > SEND > RECV > CLOSE
+// UDP SERVER: SOCKET > BIND > RECVFROM > SENDTO   > CLOSE
+// UDP CLIENT: SOCKET >>>>>>>> SENDTO   > RECVFROM > CLOSE
 int main(int argc, char* argv[])
 {
     cout << "hello from PiNetworkCommSystem!" << endl;
@@ -69,6 +77,8 @@ int main(int argc, char* argv[])
                 << "HELP :              PiNetworkCommSystem.out -h" << endl
                 << "TCP CLIENT SEND:    PiNetworkCommSystem.out -tcp -client -send -ip 192.168.3.8 -port 9999" << endl
                 << "TCP SERVER RECV:    PiNetworkCommSystem.out -tcp -server -recv -ip 192.168.110.130 -port 9999" << endl;
+                //<< "UDP CLIENT SEND:    PiNetworkCommSystem.out -udp -client -recv -ip 192.168.3.8 -port 9999" << endl
+                //<< "UDP SERVER RECV:    PiNetworkCommSystem.out -udp -server -send -ip 192.168.110.130 -port 9999" << endl;
             return 0;
         }
 
@@ -105,7 +115,7 @@ int main(int argc, char* argv[])
 #ifdef DEBUG_PARA
             cout << " " << *iter;
 #endif
-            PORT = atoi(string(*iter).c_str());
+            PORT = (uint16_t)atoi(string(*iter).c_str());
         }
 #ifdef DEBUG_PARA
         cout << endl;
@@ -117,66 +127,26 @@ int main(int argc, char* argv[])
         cout << "--- TCP " << ((CS_MODE == CLIENT_MODE) ? "CLIENT" : "SERVER") << " MODE ---" << endl;
         cout << "--- " << IP << ":" << PORT << " ---" << endl;
 
-        // create socket
-        int sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-        if (sockfd < 0)
-        {
-            cout << "socket create error, return " << sockfd << "." << endl;
-            return -1;
-        }
-        cout << "socket create success, return " << sockfd << "." << endl;
+        // CREATE SOCKET
+        socketComm = SocketComm(PROTOCOL, IP, PORT);
+        socketComm.PrintErrorCodeInfo();
 
-        // socketAddr
-        struct sockaddr_in socketAddr;
-        socketAddr.sin_family = AF_INET;
-        socketAddr.sin_port = htons(PORT);
-        socketAddr.sin_addr.s_addr = inet_addr(IP.c_str());
-
-        int connfd;
-        // TCP CLIENT
+        // TCP CLIENT CONNECT
         if (CS_MODE == CLIENT_MODE)
         {
-            // connect
-            if (connect(sockfd, (struct sockaddr*)&socketAddr, sizeof(socketAddr)) == -1)
-            {
-                cout << "socket connect error, return " << -1 << "." << endl;
-                return -2;
-            }
-            cout << "socket connect success, return " << 0 << "." << endl;
-            connfd = sockfd;
+            socketComm.SocketClientConnect();
+            socketComm.PrintErrorCodeInfo();
         }
-        // TCP SERVER
+        // TCP SERVER BIND LISTEN
         else if (CS_MODE == SERVER_MODE)
         {
-            //bind
-            if (bind(sockfd, (struct sockaddr*)&socketAddr, sizeof(socketAddr)) == -1)
-            {
-                cout << "socket bind error, return " << -1 << "." << endl;
-                return -2;
-            }
-            cout << "socket bind success, return " << 0 << "." << endl;
+            socketComm.SocketServerBind();
+            socketComm.PrintErrorCodeInfo();
 
-            // listen
-            if (listen(sockfd, 5) == -1)
-            {
-                cout << "socket listen error, return " << -1 << "." << endl;
-                return -2;
-            }
-            cout << "socket listen success, return " << 0 << "." << endl;
+            socketComm.SocketServerListen();
+            socketComm.PrintErrorCodeInfo();
 
-            struct sockaddr_in clientaddr;
-            memset(&clientaddr, 0, sizeof(clientaddr));
-            int clientfd;
-            socklen_t len = sizeof(clientaddr);
-            if ((clientfd = accept(sockfd, (struct sockaddr*)&clientaddr, &len)) == -1)
-            {
-                cout << "socket accept error, return " << -1 << "." << endl;
-                return -2;
-            }
-            cout << "socket accept success, client address:"
-                << inet_ntoa(clientaddr.sin_addr) << ":" << ntohs(clientaddr.sin_port) << "." << endl;
-
-            connfd = clientfd;
+            cout << "client address: " << socketComm.SocketServerAccept() << endl;
         }
 
         // SEND/RECV
@@ -202,42 +172,42 @@ int main(int argc, char* argv[])
                         continue;
                     }
                 }
-                if (send(connfd, send_buf.c_str(), strlen(send_buf.c_str()), 0) == -1)
-                {
-                    cout << "socket send error, return " << -1 << "." << endl;
-                    return -3;
-                }
-                cout << "socket send to server : \"" << send_buf << "\"." << endl;
+
+                if (CS_MODE == CLIENT_MODE)
+                    socketComm.SocketClientSend(send_buf);
+                else if (CS_MODE == SERVER_MODE)
+                    socketComm.SocketServerSend(send_buf);
+                socketComm.PrintErrorCodeInfo();
+
+                //cout << "Send Data: " << "\"" << send_buf << "\"." << endl;
+
                 cout << ">";
             }
         }
         else if (SR_MODE == RECV_MODE)
         {
             // Recv
-            char recv_buf[1024];
             cout << "waiting for recv..." << endl;
             while (1)
             {
-                memset(recv_buf, 0, sizeof(recv_buf));
+                string recv_str;
+                if (CS_MODE == CLIENT_MODE)
+                    recv_str = socketComm.SocketClientRecv();
+                else if (CS_MODE == SERVER_MODE)
+                    recv_str = socketComm.SocketServerRecv();
 
-                int ret = recv(connfd, recv_buf, 1024, 0);
-                if (ret == -1)
-                {
-                    cout << "socket recv error, return " << -1 << "." << endl;
-                    return -3;
-                }
-                else if (ret > 0)
-                {
-                    cout << "socket recv from server : \"" << recv_buf << "\"." << endl;
-                }
+                socketComm.PrintErrorCodeInfo();
+                if (socketComm.err_code == SOCKET_RECV_CLOSED)
+                    break;
+
+                cout << "Socket Recv from Server : \"" << recv_str << "\"." << endl;
             }
         }
         // Close
-        close(sockfd);
+        socketComm.SocketClose();
         cout << "socket closed." << endl;
-        cout << "goodbye." << endl;
     }
 
-
+    cout << "goodbye." << endl;
     return 0;
 }
