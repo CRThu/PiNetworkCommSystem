@@ -11,10 +11,10 @@ SocketComm::SocketComm(uint16_t PROTOCOL)
     this->SocketCreate(PROTOCOL);
 }
 
-SocketComm::SocketComm(uint16_t PROTOCOL, string IP, uint16_t PORT)
+SocketComm::SocketComm(uint16_t PROTOCOL, string address)
 {
     this->SocketCreate(PROTOCOL);
-    this->SocketAddr(IP, PORT);
+    socketAddr = this->SocketAddr(address);
 }
 
 void SocketComm::SocketCreate(uint16_t PROTOCOL)
@@ -31,11 +31,20 @@ void SocketComm::SocketCreate(uint16_t PROTOCOL)
         err_code = SOCKET_CREATE_SUCCESS;
 }
 
-void SocketComm::SocketAddr(string IP, uint16_t PORT)
+sockaddr_in SocketComm::SocketAddr(string address)
 {
-    socketAddr.sin_family = AF_INET;
-    socketAddr.sin_port = htons(PORT);
-    socketAddr.sin_addr.s_addr = inet_addr(IP.c_str());
+    struct sockaddr_in sockAddr;
+
+    int port_pos = address.find(':');
+
+    string IP = address.substr(0, port_pos);
+    uint16_t PORT = (uint16_t)atoi(address.substr(port_pos + 1, address.length()).c_str());
+
+    sockAddr.sin_family = AF_INET;
+    sockAddr.sin_port = htons(PORT);
+    sockAddr.sin_addr.s_addr = inet_addr(IP.c_str());
+
+    return sockAddr;
 }
 
 void SocketComm::SocketClientConnect()
@@ -104,7 +113,18 @@ void SocketComm::SocketServerSend(string send_str)
     this->SocketSend(clientfd, send_str);
 }
 
-void SocketComm::SocketClientSendTo(string send_str)
+void SocketComm::SocketUDPBind(string localAddress)
+{
+    sockaddr_in localAddr = this->SocketAddr(localAddress);
+
+    func_return = bind(sockfd, (struct sockaddr*)&localAddr, sizeof(localAddr));
+    if (func_return == -1)
+        err_code = SOCKET_BIND_ERROR;
+    else
+        err_code = SOCKET_BIND_SUCCESS;
+}
+
+void SocketComm::SocketUDPSendTo(string send_str)
 {
     func_return = sendto(sockfd, send_str.c_str(), strlen(send_str.c_str()), 0, (struct sockaddr*)&socketAddr, sizeof(socketAddr));
     if (func_return == -1)
@@ -143,7 +163,7 @@ string SocketComm::SocketServerRecv()
     return this->SocketRecv(clientfd);
 }
 
-string SocketComm::SocketClientRecvFrom()
+string SocketComm::SocketUDPRecvFrom()
 {
     char recv_buf[1024];
     memset(recv_buf, 0, sizeof(recv_buf));

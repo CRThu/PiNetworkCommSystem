@@ -1,0 +1,1 @@
+g++ -o "/home/yummycarrot/projects/PiNetworkCommSystem/bin/x64/Debug/PiNetworkCommSystem.out" -Wl,--no-undefined -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack /home/yummycarrot/projects/PiNetworkCommSystem/obj/x64/Debug/main.o /home/yummycarrot/projects/PiNetworkCommSystem/obj/x64/Debug/SocketComm.o

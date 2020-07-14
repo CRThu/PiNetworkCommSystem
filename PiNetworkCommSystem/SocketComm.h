@@ -47,24 +47,33 @@ public:
 
     SocketComm();
     SocketComm(uint16_t PROTOCOL);
-    SocketComm(uint16_t PROTOCOL, string IP, uint16_t PORT);
+    SocketComm(uint16_t PROTOCOL, string address);
 
     void SocketCreate(uint16_t PROTOCOL);
-    void SocketAddr(string IP, uint16_t PORT);
+    sockaddr_in SocketAddr(string address);
+    void SocketClose();
+
+    void SocketSend(int connfd, string send_str);
+    string SocketRecv(int connfd);
+
+    // TCP Client
     void SocketClientConnect();
+    void SocketClientSend(string send_str);
+    string SocketClientRecv();
+
+    // TCP Server
     void SocketServerBind();
     void SocketServerListen(uint16_t conn_max = 5);
     string SocketServerAccept();
-    void SocketSend(int connfd, string send_str);
-    void SocketClientSend(string send_str);
     void SocketServerSend(string send_str);
-    void SocketClientSendTo(string send_str);
-    string SocketRecv(int connfd);
-    string SocketClientRecv();
     string SocketServerRecv();
-    string SocketClientRecvFrom();
-    void SocketClose();
 
+    // UDP
+    void SocketUDPBind(string localAddress);
+    void SocketUDPSendTo(string send_str);
+    string SocketUDPRecvFrom();
+
+    // Error
     int GetErrorCode();
     string GetErrorCodeInfo();
     void PrintErrorCodeInfo();

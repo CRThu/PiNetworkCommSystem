@@ -23,8 +23,8 @@ using namespace std;
 uint8_t CS_MODE = UNKNOWN_MODE;
 uint8_t SR_MODE = UNKNOWN_MODE;
 uint8_t PROTOCOL = UNKNOWN_PROTOCOL;
-string IP = "127.0.0.1";
-uint16_t PORT = 8888;
+string LocalAddress = "";
+string RemoteAddress = "";
 
 list<string> lst_argv;
 list<string>::iterator iter;
@@ -33,21 +33,21 @@ SocketComm socketComm;
 
 // For Ubuntu Test
 // Help argv:   -h
-// Debug argv:  -tcp -client -send -ip 192.168.3.8 -port 9999
-// Debug argv:  -tcp -client -recv -ip 192.168.3.8 -port 9999
-// Debug argv:  -tcp -server -send -ip 192.168.110.130 -port 9999
-// Debug argv:  -tcp -server -recv -ip 192.168.110.130 -port 9999
-// Debug argv:  -udp -send -ip 192.168.3.8 -port 9999
-// Debug argv:  -udp -recv -ip 192.168.3.8 -port 9999
+// Debug argv:  -tcp -client -send -remote 192.168.3.8:9999
+// Debug argv:  -tcp -client -recv -remote 192.168.3.8:9999
+// Debug argv:  -tcp -server -send -local 192.168.3.39:9999
+// Debug argv:  -tcp -server -recv -local 192.168.3.39:9999
+// Debug argv:  -udp -send -remote 192.168.3.8:9999
+// Debug argv:  -udp -recv -local 192.168.3.39:9999 -remote 192.168.3.8:9999
 
 // For RaspberryPi Test
 // Help argv:   -h
-// Debug argv:  -tcp -client -send -ip 192.168.3.8 -port 9999
-// Debug argv:  -tcp -client -recv -ip 192.168.3.8 -port 9999
-// Debug argv:  -tcp -server -send -ip 192.168.3.34 -port 9999
-// Debug argv:  -tcp -server -recv -ip 192.168.3.34 -port 9999
-// Debug argv:  -udp -send -ip 192.168.3.8 -port 9999
-// Debug argv:  -udp -recv -ip 192.168.3.8 -port 9999
+// Debug argv:  -tcp -client -send -remote 192.168.3.8:9999
+// Debug argv:  -tcp -client -recv -remote 192.168.3.8:9999
+// Debug argv:  -tcp -server -send -local 192.168.3.34:9999
+// Debug argv:  -tcp -server -recv -local 192.168.3.34:9999
+// Debug argv:  -udp -send -remote 192.168.3.8:9999
+// Debug argv:  -udp -recv -local 192.168.3.34:9999 -remote 192.168.3.8:9999
 
 // TCP CLIENT: SOCKET >>>>>(BIND)>>>>>> CONNECT > SEND > RECV > CLOSE
 // TCP SERVER: SOCKET > BIND > LISTEN > ACCEPT  > RECV > SEND > CLOSE
@@ -78,14 +78,14 @@ int main(int argc, char* argv[])
                 << "-send           SEND MODE" << endl
                 << "-recv           RECV MODE" << endl
                 << "ADDRESS:" << endl
-                << "-ip 127.0.0.1   IP" << endl
-                << "-port 8888      PORT" << endl
+                << "-local          192.168.110.130:9999" << endl
+                << "-remote         192.168.3.8:9999" << endl
                 << "EXAMPLE:" << endl
                 << "HELP :              PiNetworkCommSystem.out -h" << endl
-                << "TCP CLIENT SEND:    PiNetworkCommSystem.out -tcp -client -send -ip 192.168.3.8 -port 9999" << endl
-                << "TCP SERVER RECV:    PiNetworkCommSystem.out -tcp -server -recv -ip 192.168.110.130 -port 9999" << endl
-                << "UDP SEND:           PiNetworkCommSystem.out -udp -send -ip 192.168.3.8 -port 9999" << endl
-                << "UDP RECV:           PiNetworkCommSystem.out -udp -recv -ip 192.168.3.8 -port 9999" << endl;
+                << "TCP CLIENT SEND:    PiNetworkCommSystem.out -tcp -client -send -remote 192.168.3.8:9999" << endl
+                << "TCP SERVER RECV:    PiNetworkCommSystem.out -tcp -server -recv -local 192.168.3.10:9999" << endl
+                << "UDP SEND:           PiNetworkCommSystem.out -udp -send -remote 192.168.3.8:9999" << endl
+                << "UDP RECV:           PiNetworkCommSystem.out -udp -recv -local 192.168.3.10:9999 -remote 192.168.3.8:9999" << endl;
             return 0;
         }
 
@@ -108,22 +108,24 @@ int main(int argc, char* argv[])
         if (string(*iter).compare("-recv") == 0)
             SR_MODE = RECV_MODE;
 
-        if (string(*iter).compare("-ip") == 0)
+        if (string(*iter).compare("-local") == 0)
         {
             *iter++;
+            LocalAddress = *iter;
 #ifdef DEBUG_PARA
-            cout << " " << *iter;
+            cout << " " << LocalAddress;
 #endif
-            IP = *iter;
         }
-        if (string(*iter).compare("-port") == 0)
+
+        if (string(*iter).compare("-remote") == 0)
         {
             *iter++;
+            RemoteAddress = *iter;
 #ifdef DEBUG_PARA
-            cout << " " << *iter;
+            cout <<" "<< RemoteAddress;
 #endif
-            PORT = (uint16_t)atoi(string(*iter).c_str());
         }
+
 #ifdef DEBUG_PARA
         cout << endl;
 #endif
@@ -132,23 +134,31 @@ int main(int argc, char* argv[])
     // SOCKET SETUP
     cout << "--- " << (PROTOCOL == PROTOCOL_TCP ? "TCP" : "UDP")
         << " " << ((CS_MODE == CLIENT_MODE) ? "CLIENT" : "SERVER") << " MODE ---" << endl;
-    cout << "--- " << IP << ":" << PORT << " ---" << endl;
+    if (LocalAddress.compare("") != 0)
+        cout << "--- Local Address: " << LocalAddress << " ---" << endl;
+    if (RemoteAddress.compare("") != 0)
+        cout << "--- Remote Address: " << RemoteAddress << " ---" << endl;
 
-    // CREATE SOCKET
-    socketComm = SocketComm(PROTOCOL, IP, PORT);
-    socketComm.PrintErrorCodeInfo();
 
     if (PROTOCOL == PROTOCOL_TCP)
     {
-        // TCP CLIENT CONNECT
         if (CS_MODE == CLIENT_MODE)
         {
+            // CREATE SOCKET
+            socketComm = SocketComm(PROTOCOL, RemoteAddress);
+            socketComm.PrintErrorCodeInfo();
+
+            // TCP CLIENT CONNECT
             socketComm.SocketClientConnect();
             socketComm.PrintErrorCodeInfo();
         }
-        // TCP SERVER BIND LISTEN
         else if (CS_MODE == SERVER_MODE)
         {
+            // CREATE SOCKET
+            socketComm = SocketComm(PROTOCOL, LocalAddress);
+            socketComm.PrintErrorCodeInfo();
+
+            // TCP SERVER BIND LISTEN
             socketComm.SocketServerBind();
             socketComm.PrintErrorCodeInfo();
 
@@ -160,7 +170,12 @@ int main(int argc, char* argv[])
     }
     else if (PROTOCOL == PROTOCOL_UDP)
     {
-        // TODO BIND
+        // CREATE SOCKET
+        socketComm = SocketComm(PROTOCOL, RemoteAddress);
+        socketComm.PrintErrorCodeInfo();
+
+        // UDP BIND
+        socketComm.SocketUDPBind(LocalAddress);
     }
 
     // SEND/RECV
@@ -194,9 +209,9 @@ int main(int argc, char* argv[])
                 else if (CS_MODE == SERVER_MODE)
                     socketComm.SocketServerSend(send_buf);
             }
-            else if(PROTOCOL == PROTOCOL_UDP)
+            else if (PROTOCOL == PROTOCOL_UDP)
             {
-                socketComm.SocketClientSendTo(send_buf);
+                socketComm.SocketUDPSendTo(send_buf);
             }
 
             socketComm.PrintErrorCodeInfo();
@@ -208,10 +223,10 @@ int main(int argc, char* argv[])
     }
     else if (SR_MODE == RECV_MODE)
     {
-        // TEMP: FOR FIND IP:PORT
-        if (PROTOCOL == PROTOCOL_UDP)
+        // For Find Address if not Assign LocalAddress
+        if (PROTOCOL == PROTOCOL_UDP && LocalAddress.compare("") == 0)
         {
-            socketComm.SocketClientSendTo("UDP Client Waiting For Recv!");
+            socketComm.SocketUDPSendTo("UDP Client Waiting For Recv!");
         }
 
         // Recv
@@ -229,7 +244,7 @@ int main(int argc, char* argv[])
             }
             else if (PROTOCOL == PROTOCOL_UDP)
             {
-                recv_str = socketComm.SocketClientRecvFrom();
+                recv_str = socketComm.SocketUDPRecvFrom();
             }
             socketComm.PrintErrorCodeInfo();
             if (socketComm.err_code == SOCKET_RECV_CLOSED)
