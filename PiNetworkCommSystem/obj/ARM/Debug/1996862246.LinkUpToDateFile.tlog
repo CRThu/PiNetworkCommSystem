@@ -1,1 +1,1 @@
-g++ -o "/home/pi/projects/PiNetworkCommSystem/bin/ARM/Debug/PiNetworkCommSystem.out" -Wl,--no-undefined -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack /home/pi/projects/PiNetworkCommSystem/obj/ARM/Debug/main.o
+g++ -o "/home/pi/projects/PiNetworkCommSystem/bin/ARM/Debug/PiNetworkCommSystem.out" -Wl,--no-undefined -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack /home/pi/projects/PiNetworkCommSystem/obj/ARM/Debug/main.o /home/pi/projects/PiNetworkCommSystem/obj/ARM/Debug/SocketComm.o

@@ -13,6 +13,9 @@
 
 using namespace std;
 
+#define PROTOCOL_TCP            1
+#define PROTOCOL_UDP            2
+
 #define SOCKET_NO_ERROR         0
 #define SOCKET_CREATE_SUCCESS   1
 #define SOCKET_CREATE_ERROR     -1
@@ -55,9 +58,11 @@ public:
     void SocketSend(int connfd, string send_str);
     void SocketClientSend(string send_str);
     void SocketServerSend(string send_str);
+    void SocketClientSendTo(string send_str);
     string SocketRecv(int connfd);
     string SocketClientRecv();
     string SocketServerRecv();
+    string SocketClientRecvFrom();
     void SocketClose();
 
     int GetErrorCode();

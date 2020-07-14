@@ -19,7 +19,11 @@ SocketComm::SocketComm(uint16_t PROTOCOL, string IP, uint16_t PORT)
 
 void SocketComm::SocketCreate(uint16_t PROTOCOL)
 {
-    func_return = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (PROTOCOL == PROTOCOL_TCP)
+        func_return = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    else if (PROTOCOL == PROTOCOL_UDP)
+        func_return = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+
     sockfd = func_return;
     if (func_return < 0)
         err_code = SOCKET_CREATE_ERROR;
@@ -100,6 +104,15 @@ void SocketComm::SocketServerSend(string send_str)
     this->SocketSend(clientfd, send_str);
 }
 
+void SocketComm::SocketClientSendTo(string send_str)
+{
+    func_return = sendto(sockfd, send_str.c_str(), strlen(send_str.c_str()), 0, (struct sockaddr*)&socketAddr, sizeof(socketAddr));
+    if (func_return == -1)
+        err_code = SOCKET_SEND_ERROR;
+    else
+        err_code = SOCKET_SEND_SUCCESS;
+}
+
 string SocketComm::SocketRecv(int connfd)
 {
     char recv_buf[1024];
@@ -130,10 +143,30 @@ string SocketComm::SocketServerRecv()
     return this->SocketRecv(clientfd);
 }
 
+string SocketComm::SocketClientRecvFrom()
+{
+    char recv_buf[1024];
+    memset(recv_buf, 0, sizeof(recv_buf));
+
+    struct sockaddr_in clientaddr;
+    memset(&clientaddr, 0, sizeof(clientaddr));
+    socklen_t len = sizeof(clientaddr);
+
+    func_return = recvfrom(sockfd, recv_buf, 1024, 0, (struct sockaddr*)&clientaddr, &len);
+
+    if (func_return == -1)
+        err_code = SOCKET_RECV_ERROR;
+    else if (func_return > 0)
+    {
+        err_code = SOCKET_RECV_SUCCESS;
+        return string(recv_buf);
+    }
+}
+
 void SocketComm::SocketClose()
 {
     close(sockfd);
-    if(clientfd != -1)
+    if (clientfd != -1)
         close(clientfd);
 }
 
