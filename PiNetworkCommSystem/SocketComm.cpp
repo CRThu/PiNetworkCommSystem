@@ -76,22 +76,21 @@ void SocketComm::SocketServerListen(uint16_t conn_max)
 
 string SocketComm::SocketServerAccept()
 {
-    struct sockaddr_in clientaddr;
-    memset(&clientaddr, 0, sizeof(clientaddr));
-    socklen_t len = sizeof(clientaddr);
+    memset(&clientAddr, 0, sizeof(clientAddr));
+    socklen_t len = sizeof(clientAddr);
 
-    func_return = accept(sockfd, (struct sockaddr*)&clientaddr, &len);
+    func_return = accept(sockfd, (struct sockaddr*)&clientAddr, &len);
     clientfd = func_return;
     if (func_return == -1)
         err_code = SOCKET_ACCEPT_ERROR;
     else
         err_code = SOCKET_ACCEPT_SUCCESS;
 
-    char port_c[10];
-    sprintf(port_c, "%d", ntohs(clientaddr.sin_port));
-    string port_s(port_c);
 
-    return string(inet_ntoa(clientaddr.sin_addr)) + ":" + port_s;
+    char port_c[10];
+    sprintf(port_c, "%d", ntohs(clientAddr.sin_port));
+    string port_s(port_c);
+    return string(inet_ntoa(clientAddr.sin_addr)) + ":" + port_s;
 }
 
 void SocketComm::SocketSend(int connfd, string send_str)
@@ -135,10 +134,10 @@ void SocketComm::SocketUDPSendTo(string send_str)
 
 string SocketComm::SocketRecv(int connfd)
 {
-    char recv_buf[1024];
+    char recv_buf[1000000];
     memset(recv_buf, 0, sizeof(recv_buf));
 
-    func_return = recv(connfd, recv_buf, 1024, 0);
+    func_return = recv(connfd, recv_buf, 1000000, 0);
     if (func_return == -1)
         err_code = SOCKET_RECV_ERROR;
     else if (func_return > 0)
@@ -181,6 +180,16 @@ string SocketComm::SocketUDPRecvFrom()
         err_code = SOCKET_RECV_SUCCESS;
         return string(recv_buf);
     }
+}
+
+string SocketComm::GetClientAddress()
+{
+    // TODO clientAddr
+    char port_c[10];
+    sprintf(port_c, "%d", ntohs(clientAddr.sin_port));
+    string port_s(port_c);
+
+    return string(inet_ntoa(clientAddr.sin_addr)) + ":" + port_s;
 }
 
 void SocketComm::SocketClose()

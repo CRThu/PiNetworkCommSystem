@@ -38,13 +38,12 @@ class SocketComm
 {
 private:
     int func_return;
-public:
     int sockfd = -1;
     int clientfd = -1;
     struct sockaddr_in socketAddr;
-
+    struct sockaddr_in clientAddr;
     int err_code = SOCKET_NO_ERROR;
-
+public:
     SocketComm();
     SocketComm(uint16_t PROTOCOL);
     SocketComm(uint16_t PROTOCOL, string address);
@@ -72,6 +71,9 @@ public:
     void SocketUDPBind(string localAddress);
     void SocketUDPSendTo(string send_str);
     string SocketUDPRecvFrom();
+
+    // Address
+    string GetClientAddress();
 
     // Error
     int GetErrorCode();

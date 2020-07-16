@@ -7,16 +7,16 @@
     <RemoteTarget>1571480385;192.168.110.130 (username=, port=22, authentication=Password)</RemoteTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
-    <RemoteDebuggerCommandArguments>-udp -recv -local 192.168.3.34:9999 -remote 192.168.3.8:9999</RemoteDebuggerCommandArguments>
+    <RemoteDebuggerCommandArguments>-post</RemoteDebuggerCommandArguments>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
-    <RemoteDebuggingTarget>1996862246;192.168.3.34 (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
-    <RemoteTarget>1996862246;192.168.3.34 (username=, port=22, authentication=Password)</RemoteTarget>
+    <RemoteDebuggingTarget>110558607;172.20.10.3 (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <RemoteTarget>110558607;172.20.10.3 (username=, port=22, authentication=Password)</RemoteTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <RemoteTarget>2058492516;192.168.3.39 (username=, port=22, authentication=Password)</RemoteTarget>
-    <RemoteDebuggingTarget>2058492516;192.168.3.39 (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <RemoteTarget>603002465;172.20.10.2 (username=, port=22, authentication=Password)</RemoteTarget>
+    <RemoteDebuggingTarget>603002465;172.20.10.2 (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
-    <RemoteDebuggerCommandArguments>-udp -recv -local 192.168.3.39:9999 -remote 192.168.3.8:9999</RemoteDebuggerCommandArguments>
+    <RemoteDebuggerCommandArguments>-post</RemoteDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <RemoteTarget>1571480385;192.168.110.130 (username=, port=22, authentication=Password)</RemoteTarget>

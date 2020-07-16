@@ -1,29 +1,32 @@
 ﻿  正在验证源
-  正在将源远程复制到“192.168.3.39”
+  正在将源远程复制到“172.20.10.2”
   正在验证体系结构
   正在验证体系结构
   正在启动远程生成
   正在编译源:
   main.cpp
+D:\Code\Visual Studio\PiNetworkCommSystem\main.cpp(300,34): warning : suggest parentheses around assignment used as truth value [-Wparentheses]
+D:\Code\Visual Studio\PiNetworkCommSystem\main.cpp(300,34): warning :      else if (PROTOCOL = HTTP_POST)
+D:\Code\Visual Studio\PiNetworkCommSystem\main.cpp(300,34): warning :                                   ^
   SocketComm.cpp
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(38,36): warning : conversion to ‘int’ from ‘std::__cxx11::basic_string<char>::size_type {aka long unsigned int}’ may alter its value [-Wconversion]
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(99,17): warning : conversion to ‘int’ from ‘ssize_t {aka long int}’ may alter its value [-Wconversion]
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(99,17): warning :      func_return = send(connfd, send_str.c_str(), strlen(send_str.c_str()), 0);
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(99,17): warning :                  ^
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(129,17): warning : conversion to ‘int’ from ‘ssize_t {aka long int}’ may alter its value [-Wconversion]
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(129,17): warning :      func_return = sendto(sockfd, send_str.c_str(), strlen(send_str.c_str()), 0, (struct sockaddr*)&socketAddr, sizeof(socketAddr));
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(129,17): warning :                  ^
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(141,17): warning : conversion to ‘int’ from ‘ssize_t {aka long int}’ may alter its value [-Wconversion]
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(141,17): warning :      func_return = recv(connfd, recv_buf, 1024, 0);
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(141,17): warning :                  ^
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(175,17): warning : conversion to ‘int’ from ‘ssize_t {aka long int}’ may alter its value [-Wconversion]
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(175,17): warning :      func_return = recvfrom(sockfd, recv_buf, 1024, 0, (struct sockaddr*)&clientaddr, &len);
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(175,17): warning :                  ^
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(154,1): warning : control reaches end of non-void function [-Wreturn-type]
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(154,1): warning :  }
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(154,1): warning :  ^
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(184,1): warning : control reaches end of non-void function [-Wreturn-type]
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(184,1): warning :  }
-D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\SocketComm.cpp(184,1): warning :  ^
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(38,36): warning : conversion to ‘int’ from ‘std::__cxx11::basic_string<char>::size_type {aka long unsigned int}’ may alter its value [-Wconversion]
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(98,17): warning : conversion to ‘int’ from ‘ssize_t {aka long int}’ may alter its value [-Wconversion]
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(98,17): warning :      func_return = send(connfd, send_str.c_str(), strlen(send_str.c_str()), 0);
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(98,17): warning :                  ^
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(128,17): warning : conversion to ‘int’ from ‘ssize_t {aka long int}’ may alter its value [-Wconversion]
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(128,17): warning :      func_return = sendto(sockfd, send_str.c_str(), strlen(send_str.c_str()), 0, (struct sockaddr*)&socketAddr, sizeof(socketAddr));
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(128,17): warning :                  ^
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(140,17): warning : conversion to ‘int’ from ‘ssize_t {aka long int}’ may alter its value [-Wconversion]
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(140,17): warning :      func_return = recv(connfd, recv_buf, 1000000, 0);
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(140,17): warning :                  ^
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(174,17): warning : conversion to ‘int’ from ‘ssize_t {aka long int}’ may alter its value [-Wconversion]
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(174,17): warning :      func_return = recvfrom(sockfd, recv_buf, 1024, 0, (struct sockaddr*)&clientaddr, &len);
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(174,17): warning :                  ^
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(153,1): warning : control reaches end of non-void function [-Wreturn-type]
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(153,1): warning :  }
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(153,1): warning :  ^
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(183,1): warning : control reaches end of non-void function [-Wreturn-type]
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(183,1): warning :  }
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(183,1): warning :  ^
   正在链接对象
-  PiNetworkCommSystem.vcxproj -> D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\bin\x64\Debug\PiNetworkCommSystem.out
+  PiNetworkCommSystem.vcxproj -> D:\Code\Visual Studio\PiNetworkCommSystem\bin\x64\Debug\PiNetworkCommSystem.out

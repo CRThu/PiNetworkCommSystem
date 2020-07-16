@@ -1,9 +1,19 @@
 ﻿  正在验证源
-  正在将源远程复制到“192.168.3.34”
+  正在将源远程复制到“172.20.10.3”
   正在验证体系结构
   正在验证体系结构
   正在启动远程生成
   正在编译源:
   main.cpp
+D:\Code\Visual Studio\PiNetworkCommSystem\main.cpp(300,23): warning : suggest parentheses around assignment used as truth value [-Wparentheses]
+D:\Code\Visual Studio\PiNetworkCommSystem\main.cpp(300,23): warning :      else if (PROTOCOL = HTTP_POST)
+D:\Code\Visual Studio\PiNetworkCommSystem\main.cpp(300,23): warning :                        ^
+  SocketComm.cpp
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(153,1): warning : control reaches end of non-void function [-Wreturn-type]
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(153,1): warning :  }
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(153,1): warning :  ^
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(183,1): warning : control reaches end of non-void function [-Wreturn-type]
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(183,1): warning :  }
+D:\Code\Visual Studio\PiNetworkCommSystem\SocketComm.cpp(183,1): warning :  ^
   正在链接对象
-  PiNetworkCommSystem.vcxproj -> D:\GitHub\PiNetworkCommSystem\PiNetworkCommSystem\bin\ARM\Debug\PiNetworkCommSystem.out
+  PiNetworkCommSystem.vcxproj -> D:\Code\Visual Studio\PiNetworkCommSystem\bin\ARM\Debug\PiNetworkCommSystem.out
